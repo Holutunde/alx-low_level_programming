@@ -25,7 +25,7 @@ list_t *add_node(list_t **head, const char *str)
 		}
 		while (new->str[sum])
 			sum++;
-		new->len = x;
+		new->len = sum;
 		new->next = *head;
 		*head = new;
 
