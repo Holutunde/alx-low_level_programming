@@ -1,30 +1,34 @@
-#include "holberton.h"
+#include "main.h"
+
 /**
- * append_text_to_file - appends text
- * @filename: the file
- * @text_content: string in the file
- * Description: Function that append a file
- * Return: -1 or 1
+ * append_text_to_file - Appends text at the end of a file.
+ * standard output.
+ * @filename: Name of the file to append.
+ * @text_content: NULL terminated string to write to the file.
+ * Return: 1 on success, -1 on failure.
  */
 int append_text_to_file(const char *filename, char *text_content)
 {
-	int fp = 0, w = -1;
+	int fd, res_write, length;
 
-	if (filename)
+	if (filename == NULL)
+		return (-1);
+	if (text_content != NULL)
 	{
-		for (w = 0; text_content && text_content[w]; w++)
-			;
-		fp = open(filename, O_WRONLY | O_APPEND);
-
-		if (text_content && fp != -1)
+		fd = open(filename, O_WRONLY | O_APPEND);
+		if (fd == -1)
+			return (-1);
+		length = 0;
+		while (*(text_content + length) != '\0')
+			length++;
+		res_write = write(fd, text_content, length);
+		if (res_write == -1)
 		{
-			w = write(fp, text_content, w);
-			close(fp);
+			close(fd);
+			write(STDOUT_FILENO, "fails", 5);
+			return (-1);
 		}
-		else
-			if (text_content)
-				w = -1;
 	}
-
-	return (w != -1 ? 1 : w);
+	close(fd);
+	return (1);
 }
